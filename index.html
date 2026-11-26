@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAAT WiFi — Ocean Cards (New Design)</title>
+<style>
+  :root{
+    --bg:#eef4f8; --bg2:#e3edf5;
+    --ink:#0f2733; --sub:#5c7585;
+    --card:#ffffff;
+    --ocean:#0ea5b7; --ocean-d:#0b7f8e;
+    --sun:#ff8a3d; --grape:#7c5cff; --leaf:#22b573; --berry:#ff5d7e;
+    --shadow:0 10px 30px rgba(15,39,51,.10);
+    --shadow-sm:0 4px 14px rgba(15,39,51,.08);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{font-family:"Plus Jakarta Sans",-apple-system,"Segoe UI",Roboto,system-ui,sans-serif;color:var(--ink);
+    background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100%;
+    display:flex;flex-direction:column;align-items:center;padding:26px 14px 60px}
+  .head{text-align:center;margin-bottom:20px}
+  .head h1{font-size:19px;margin:0 0 4px;color:var(--ocean-d)}
+  .head p{font-size:12px;color:var(--sub);margin:0}
+
+  .phone{width:min(380px,93vw);background:var(--card);border-radius:44px;padding:12px;
+    box-shadow:0 30px 70px rgba(15,39,51,.18)}
+  .scr{border-radius:34px;overflow:hidden;background:var(--bg)}
+  .scroll{padding:16px 15px 24px;display:flex;flex-direction:column;gap:13px;max-height:80vh;overflow-y:auto}
+  .scroll::-webkit-scrollbar{width:0}
+
+  /* top bar */
+  .top{display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:8px}
+  .logomark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--ocean),var(--grape));
+    display:grid;place-items:center;color:#fff;font-size:17px;box-shadow:var(--shadow-sm)}
+  .logo .name{font-size:17px;font-weight:800;letter-spacing:-.3px}
+  .top .bell{width:38px;height:38px;border-radius:14px;background:var(--card);box-shadow:var(--shadow-sm);
+    display:grid;place-items:center;font-size:17px;position:relative}
+  .top .bell .d{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--berry)}
+
+  /* greeting */
+  .greet{font-size:13px;color:var(--sub);font-weight:600}
+  .gname{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-top:2px}
+
+  /* big gauge card (ocean) */
+  .gauge{background:linear-gradient(135deg,var(--ocean),var(--ocean-d));border-radius:30px;padding:20px;
+    color:#fff;box-shadow:0 16px 36px rgba(14,165,183,.35);position:relative;overflow:hidden}
+  .gauge:after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;
+    background:rgba(255,255,255,.10);top:-50px;right:-40px}
+  .gauge .gl{font-size:12.5px;opacity:.9;font-weight:600}
+  .gauge .gv{font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1;margin-top:4px}
+  .gauge .gu{font-size:13px;opacity:.85;font-weight:600}
+  .gauge .gstat{margin-top:12px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);
+    padding:6px 12px;border-radius:99px;font-size:12px;font-weight:700}
+  .gauge .dot{width:7px;height:7px;border-radius:50%;background:#c8ffe0}
+
+  /* colorful mini stat cards row */
+  .statrow{display:flex;gap:10px}
+  .stat{flex:1;border-radius:22px;padding:14px 12px;color:#fff;box-shadow:var(--shadow-sm)}
+  .stat.a{background:linear-gradient(135deg,var(--sun),#ff5d7e)}
+  .stat.b{background:linear-gradient(135deg,var(--grape),#5b8cff)}
+  .stat .sl{font-size:11px;opacity:.9;font-weight:600}
+  .stat .sv{font-size:20px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+  .stat .ss{font-size:10px;opacity:.85;margin-top:2px}
+
+  /* white content cards */
+  .card{background:var(--card);border-radius:24px;padding:16px;box-shadow:var(--shadow-sm)}
+  .ch{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--ink)}
+  .ch .ci{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:15px}
+  .ci.ocean{background:rgba(14,165,183,.14)}.ci.sun{background:rgba(255,138,61,.14)}
+  .ci.grape{background:rgba(124,92,255,.14)}.ci.leaf{background:rgba(34,181,115,.14)}
+
+  /* speed test */
+  .speed .row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:12px}
+  .speed .big{font-size:32px;font-weight:800;letter-spacing:-1px;color:var(--ocean-d)}
+  .speed .u{font-size:12px;color:var(--sub);font-weight:700}
+  .speed .go{background:linear-gradient(135deg,var(--ocean),var(--grape));color:#fff;font-size:12.5px;font-weight:800;
+    padding:10px 16px;border-radius:14px;box-shadow:var(--shadow-sm)}
+  .speed .stats{display:flex;gap:10px;margin-top:12px}
+  .speed .si{flex:1;background:var(--bg);border-radius:14px;padding:10px;text-align:center}
+  .speed .si b{display:block;font-size:15px;font-weight:800;color:var(--ink)}
+  .speed .si span{font-size:10px;color:var(--sub)}
+
+  /* data bars */
+  .bars{display:flex;align-items:flex-end;gap:8px;height:70px;margin-top:14px}
+  .bar{flex:1;border-radius:7px 7px 0 0;background:linear-gradient(var(--ocean),var(--grape))}
+  .bar.dim{background:#e3edf5}
+  .days{display:flex;gap:8px;margin-top:6px}.days span{flex:1;text-align:center;font-size:9px;color:var(--sub)}
+
+  /* free data */
+  .free{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#fff5ec,#ffe9f0);border-radius:22px;padding:14px 16px;box-shadow:var(--shadow-sm)}
+  .free .fi{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--sun),var(--berry));display:grid;place-items:center;font-size:20px}
+  .free .ft{font-size:14px;font-weight:800}.free .fs{font-size:11.5px;color:var(--sub)}
+  .free .go{margin-left:auto;background:var(--sun);color:#fff;font-size:12px;font-weight:800;padding:9px 14px;border-radius:13px}
+
+  /* quick actions */
+  .qa{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .qbtn{background:var(--card);border-radius:18px;padding:13px 4px;text-align:center;box-shadow:var(--shadow-sm)}
+  .qbtn .qi{width:38px;height:38px;margin:0 auto;border-radius:12px;display:grid;place-items:center;font-size:18px}
+  .qbtn .ql{font-size:10px;font-weight:700;color:var(--sub);margin-top:7px}
+  .q1{background:rgba(14,165,183,.14)}.q2{background:rgba(255,138,61,.14)}.q3{background:rgba(124,92,255,.14)}.q4{background:rgba(255,93,126,.14)}
+
+  /* prayer */
+  .prays{display:flex;gap:7px;margin-top:12px}
+  .pray{flex:1;text-align:center;padding:11px 3px;border-radius:15px;background:var(--bg);font-size:10px;font-weight:700;color:var(--sub)}
+  .pray .n{font-size:11.5px;color:var(--ink);margin-bottom:4px}
+  .pray.active{background:linear-gradient(135deg,var(--ocean),var(--grape));color:#fff}
+  .pray.active .n{color:#fff}
+  .ph{display:flex;justify-content:space-between;align-items:center}.ph .t{font-size:11px;color:var(--sub);font-weight:700}
+
+  /* actions */
+  .acts{display:flex;gap:11px}
+  .act{flex:1;height:76px;border-radius:24px;padding:15px;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+  .act.admin{background:linear-gradient(135deg,var(--grape),#5b8cff);color:#fff;box-shadow:0 12px 26px rgba(124,92,255,.3)}
+  .act.watch{background:var(--card);box-shadow:var(--shadow-sm)}
+  .act .top{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800}
+  .act .seen{font-size:11px;opacity:.9}.act.watch .seen{color:var(--sub)}
+  .badge{position:absolute;top:12px;right:12px;min-width:21px;height:21px;padding:0 6px;border-radius:11px;background:var(--berry);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;box-shadow:0 4px 10px rgba(255,93,126,.4)}
+
+  .note{max-width:380px;margin-top:24px;font-size:12px;color:var(--sub);text-align:center;line-height:1.6}
+  .note b{color:var(--ink)}
+  .tags{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+  .tag{font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:10px;background:var(--card);box-shadow:var(--shadow-sm);color:var(--ocean-d)}
+</style>
+</head>
+<body>
+  <div class="head"><h1>Ocean Cards — naya design</h1><p>Soft white · colorful cards · big gauge</p></div>
+  <div class="phone"><div class="scr"><div class="scroll">
+
+    <div class="top">
+      <div class="logo"><div class="logomark">📶</div><div class="name">JAAT WiFi</div></div>
+      <div class="bell">🔔<div class="d"></div></div>
+    </div>
+
+    <div><div class="greet">Assalam-o-Alaikum,</div><div class="gname">Nadeem Phone</div></div>
+
+    <!-- BIG GAUGE (signal/connection) -->
+    <div class="gauge">
+      <div class="gl">Live Signal</div>
+      <div><span class="gv">−54</span> <span class="gu">dBm · 5 GHz</span></div>
+      <div class="gstat"><span class="dot"></span> Connected · Authenticated</div>
+    </div>
+
+    <!-- colorful stat cards -->
+    <div class="statrow">
+      <div class="stat a"><div class="sl">Remaining</div><div class="sv">22</div><div class="ss">days left</div></div>
+      <div class="stat b"><div class="sl">Data used</div><div class="sv">145</div><div class="ss">GB · 100 limit</div></div>
+    </div>
+
+    <!-- speed test -->
+    <div class="card speed">
+      <div class="ch"><div class="ci ocean">⚡</div> Speed Test</div>
+      <div class="row"><div><span class="big">24.8</span> <span class="u">Mbps ↓</span></div><div class="go">Test karein</div></div>
+      <div class="stats">
+        <div class="si"><b>12.4</b><span>Upload</span></div>
+        <div class="si"><b>18ms</b><span>Ping</span></div>
+        <div class="si"><b>5GHz</b><span>Band</span></div>
+      </div>
+    </div>
+
+    <!-- data graph -->
+    <div class="card">
+      <div class="ch"><div class="ci grape">📊</div> Data This Week</div>
+      <div class="bars">
+        <div class="bar dim" style="height:30%"></div><div class="bar" style="height:55%"></div>
+        <div class="bar dim" style="height:40%"></div><div class="bar" style="height:75%"></div>
+        <div class="bar" style="height:90%"></div><div class="bar dim" style="height:25%"></div>
+        <div class="bar" style="height:60%"></div>
+      </div>
+      <div class="days"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+    </div>
+
+    <!-- free data -->
+    <div class="free">
+      <div class="fi">🎁</div>
+      <div><div class="ft">Free 500MB Daily</div><div class="fs">Aaj 0/500 collected</div></div>
+      <div class="go">Collect</div>
+    </div>
+
+    <!-- quick actions -->
+    <div class="qa">
+      <div class="qbtn"><div class="qi q1">🎫</div><div class="ql">Voucher</div></div>
+      <div class="qbtn"><div class="qi q2">⬆️</div><div class="ql">Extend</div></div>
+      <div class="qbtn"><div class="qi q3">🔗</div><div class="ql">Share</div></div>
+      <div class="qbtn"><div class="qi q4">⚠️</div><div class="ql">Report</div></div>
+    </div>
+
+    <!-- prayer -->
+    <div class="card">
+      <div class="ph"><div class="ch"><div class="ci leaf">🕌</div> Namaz Auqaat</div><div class="t">Maghrib · 1h 23m</div></div>
+      <div class="prays">
+        <div class="pray"><div class="n">Fajr</div>5:12</div>
+        <div class="pray"><div class="n">Zuhar</div>12:04</div>
+        <div class="pray active"><div class="n">Asr</div>3:38</div>
+        <div class="pray"><div class="n">Maghrib</div>5:01</div>
+        <div class="pray"><div class="n">Isha</div>6:21</div>
+      </div>
+    </div>
+
+    <!-- actions -->
+    <div class="acts">
+      <div class="act admin"><div class="top">💬 Chats</div><div class="seen">Admin + Friends</div><div class="badge">3</div></div>
+      <div class="act watch"><div class="top">📺 Watch</div><div class="seen">Videos · Naat</div></div>
+    </div>
+
+  </div></div></div>
+
+  <div class="note">
+    <b>Ocean Cards</b> — bilkul naya design: soft white base, har card ka apna
+    <b>color accent</b> (ocean/sun/grape/leaf), bada <b>signal gauge</b>, elevated rounded cards.
+    Aurora/Sand/Neon se alag. Yeh <b>concept mockup</b> hai, asli app nahi.
+  </div>
+  <div class="tags">
+    <span class="tag">🌊 Ocean gauge</span><span class="tag">🎨 Color cards</span>
+    <span class="tag">⚡ Speed</span><span class="tag">📊 Graph</span><span class="tag">🎁 Free</span>
+  </div>
+</body></html>
